@@ -3,16 +3,33 @@ from discord.ext.commands import Bot
 from discord.ext import commands
 import asyncio
 import random
+import time
+from threading import Thread
 
-bot = commands.Bot(command_prefix = '.')
-token = 'TOKEN'
+#setting up thingz
+timeloop = True
+sec = 0
+bot = commands.Bot(command_prefix = '!', case_insensitive = True)
+game = discord.Game(name = 'game name')
+TOKEN = 'token'
+
+#timer function
+def timer():
+	global sec
+	while timeloop:
+		time.sleep(1)
+		sec += 1
+
+background_thread = Thread(target=timer)
+background_thread.start()
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(game = discord.Game(name = 'with my horn'))
-    print("Bot is online and connected to Discord")
+	await bot.change_presence(activity = game)
+	print("Bot is online and connected to Discord")
 
 #functions for attack command
+
 def getBossHealth():
 	bosshealthfile_read = open('bosshealth.txt', 'r')
 	health = bosshealthfile_read.read()
@@ -57,15 +74,15 @@ def changeTotalHealth(amount):
 	totalhealthfile_write.write(str(amount))
 	totalhealthfile_write.close()
 
-#start of commands
-@bot.event
-async def ping():
-	await bot.say('pong!')
-
 @bot.command()
 async def attack():
+	global sec
+	if sec < 5:
+		await bot.say('You cannot attack for another ' + str(5-sec) + ' seconds.')
+		return
+	sec = 0
 	health = int(getBossHealth())
-	boss = ['Valo', 'Jasper', 'Xoshi', 'Luc', 'Xolia', 'Angle', 'Liam', 'Clarence', 'Gabriel', 'Lem', 'Bow']
+	boss = ['list of names']
 	name = getBossName()
 	defeatedtimes = int(getDefeatedTimes())
 	totalhealth = int(getTotalHealth())
@@ -84,5 +101,6 @@ async def attack():
 			changeBossName(name)
 			await bot.say('You have defeated the boss!\n\na new enemy appears')
 		await bot.say('level %s: %s \n%s / %s HP \n\nYou have done %s damage! ' % (defeatedtimes, name, health, totalhealth, damage))
-
+		
+#running the bot
 bot.run(TOKEN)
