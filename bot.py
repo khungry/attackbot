@@ -6,14 +6,14 @@ import random
 import time
 from threading import Thread
 
-#setting up thingz
+# setting up thingz
 timeloop = True
 sec = 0
-bot = commands.Bot(command_prefix = '!', case_insensitive = True)
-game = discord.Game(name = 'game name')
-TOKEN = 'token'
+bot = commands.Bot(command_prefix = '!', case_insensitive = True) # you can change the prefix here
+game = discord.Game(name = 'game name') # replace game name with, well, the game name
+TOKEN = 'token' # put bot token here
 
-#timer function
+# timer function
 def timer():
 	global sec
 	while timeloop:
@@ -28,7 +28,9 @@ async def on_ready():
 	await bot.change_presence(activity = game)
 	print("Bot is online and connected to Discord")
 
-#functions for attack command
+# functions for attack command
+# you need to make four txt files called bosshealth, defeatedtimes, bossname, and totalhealth
+# and set the first boss' stats in those
 
 def getBossHealth():
 	bosshealthfile_read = open('bosshealth.txt', 'r')
@@ -77,7 +79,7 @@ def changeTotalHealth(amount):
 @bot.command()
 async def attack():
 	global sec
-	if sec < 5:
+	if sec < 5: # you can customize how many seconds you want in between to allow people to attack
 		await bot.say('You cannot attack for another ' + str(5-sec) + ' seconds.')
 		return
 	sec = 0
