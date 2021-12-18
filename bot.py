@@ -11,7 +11,7 @@ timeloop = True
 sec = 0
 bot = commands.Bot(command_prefix = '!', case_insensitive = True) # you can change the prefix here
 game = discord.Game(name = 'game name') # replace game name with, well, the game name
-TOKEN = 'token' # put bot token here
+TOKEN = 'ODY3NDI1NjQ3MzIwMjM2MDMz.YYT6ng.HC1nMZd3q8qWxnswLFYE_WMf-QQ' # put bot token here
 
 # timer function
 def timer():
